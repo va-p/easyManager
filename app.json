@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "easyManager",
+    "slug": "easyManager",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
