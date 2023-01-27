@@ -11,14 +11,14 @@ type Props = RectButtonProps & {
 }
 
 export function Button({
-  type = 'primary',
+  type = 'dark',
   title,
   isLoading = false,
   ...rest
 }: Props) {
   return (
     <Container {...rest} type={type} enabled={!isLoading}>
-      {isLoading ? <Load type={type} /> : <Title type={type}>{title}</Title>}
+      {isLoading ? <Load /> : <Title>{title}</Title>}
     </Container>
   );
 }
