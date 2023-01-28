@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'react-native';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ThemeProvider } from 'styled-components/native';
 import * as SplashScreen from 'expo-splash-screen';
+import { Provider } from 'react-redux'
 import * as Font from 'expo-font';
+
+import { store } from './src/store'
 
 import {
   Poppins_400Regular,
@@ -11,6 +15,8 @@ import {
   Poppins_700Bold
 } from '@expo-google-fonts/poppins';
 import { Routes } from '@routes/index';
+
+import theme from '@themes/theme';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -41,9 +47,13 @@ export default function App() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar barStyle='light-content' />
-      <Routes />
-    </GestureHandlerRootView>
+    <Provider store={store}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <ThemeProvider theme={theme}>
+          <StatusBar barStyle='light-content' />
+          <Routes />
+        </ThemeProvider>
+      </GestureHandlerRootView>
+    </Provider>
   );
 }
