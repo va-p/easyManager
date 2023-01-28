@@ -11,6 +11,7 @@ import {
   InputGroup
 } from './styles';
 
+import { getStorage, ref, uploadString } from 'firebase/storage';
 import { BorderlessButton } from 'react-native-gesture-handler';
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as ImagePicker from 'expo-image-picker';
 import { Rating } from 'react-native-ratings';
 import { useForm } from 'react-hook-form';
+import { decode } from 'base-64';
 import * as yup from 'yup';
 
 import { ControlledInput } from '@components/ControlledInput';
@@ -43,7 +45,7 @@ import {
   setProductPrice,
 } from '@slices/productSlice';
 
-import db from '@configs/firebaseConfig';
+import { db, imagesRef } from '@configs/firebaseConfig';
 
 import theme from '@themes/theme';
 
@@ -89,7 +91,8 @@ const schema = yup.object().shape({
 export function EditProduct({ closeProduct }: Props) {
   const [buttonIsLoading, setButtonIsLoading] = useState(false);
   const [productImageUrl, setProductImageUrl] = useState('');
-  const [productImageBase64, setProductImageBase64] = useState<string>();
+  const [productImageFilename, setProductImageFilename] = useState<any>('');
+  const [productImageBase64, setProductImageBase64] = useState<any>();
   const dispatch = useDispatch();
 
   const id = useSelector(selectProductId);
@@ -117,6 +120,7 @@ export function EditProduct({ closeProduct }: Props) {
       });
       if (!response.canceled) {
         setProductImageUrl(response.assets[0].uri);
+        setProductImageFilename(response.assets[0].fileName);
         setProductImageBase64(response.assets[0].base64);
       }
     } else {
@@ -128,11 +132,26 @@ export function EditProduct({ closeProduct }: Props) {
     setButtonIsLoading(true);
 
     try {
+      if (productImageBase64) {
+        if (typeof atob === 'undefined') {
+          global.atob = decode;
+        }
+
+        const image = productImageBase64;
+        uploadString(imagesRef, image, 'base64').then((snapshot) => {
+          console.log('Uploaded a base64 string!');
+        });
+      }
+
+      if (!description){
+        setProductDescription('')
+      }
+
       const productUpdated = {
         title: form.title,
         type: form.type,
         description: form.description,
-        //filename: filename,
+        filename: productImageFilename,
         height: form.height,
         width: form.width,
         price: form.price,
@@ -168,7 +187,9 @@ export function EditProduct({ closeProduct }: Props) {
         setProductRating(rating)
       );
 
-      Alert.alert("Edição de produto", "Produto editado com sucesso!", [{ text: "Voltar para a home", onPress: closeProduct }, { text: "Continuar editando o produto." }])
+      Alert.alert("Edição de produto", "Produto editado com sucesso!",
+        [{ text: "Voltar para a home", onPress: closeProduct },
+        { text: "Continuar editando o produto" }])
     } catch (error) {
       console.error(error);
       Alert.alert("Edição de produto", "Não foi possível editar o produto. Verifique sua internet e tente novamente")
