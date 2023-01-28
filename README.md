@@ -17,16 +17,18 @@ Aplicativo para listar e gerenciar produtos de forma intuitiva, prática e efica
 -   [X] React Native
 -   [X] Typescript
 -   [X] Expo Bare Workflow
+-   [X] Styled Components
+-   [X] Babel Module Resolver
+-   [X] React Native Gesture Handler
+-   [X] React Native Reanimated
+-   [X] React Hook Form
 -   [X] Redux
--   [X] Async Storage
 -   [X] Vector Icons
 -   [ ] React Native Svg e Svg Transform
 -   [X] Axios
 -   [X] Expo Google Fonts
 -   [X] React Navigation Stack
 -   [X] React Navigation Bottom Tabs
--   [X] React Native Gesture Handler
--   [X] Expo Local Authentication
 
 
 ## 🔖 Layout
@@ -36,6 +38,7 @@ Aplicativo para listar e gerenciar produtos de forma intuitiva, prática e efica
 ## Executando o projeto
 
 Utilize o **yarn** ou o **npm install** para instalar as dependências do projeto.
+Crie um arquivo com o nome "firebaseConfig.ts" na pasta "src/configs", seguindo o exemplo do arquivo "firebaseConfigExample.ts".
 Em seguida, inicie o projeto.
 
 ```cl
